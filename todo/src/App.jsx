@@ -1,122 +1,60 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import './App.css'; // Pastikan CSS di-import
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [inputTugas, setInputTugas] = useState('');
+  const [daftarTodo, setDaftarTodo] = useState([]);
+
+  const tambahTugas = (e) => {
+    e.preventDefault();
+    if (inputTugas.trim() === '') return;
+    setDaftarTodo([...daftarTodo, inputTugas]);
+    setInputTugas('');
+  };
+
+  const hapusTugas = (indexTarget) => {
+    setDaftarTodo(daftarTodo.filter((_, index) => index !== indexTarget));
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div id="center">
+      <div className="todo-container">
+        <h2>My Todo List</h2>
+        
+        <form onSubmit={tambahTugas} className="todo-form">
+          <input
+            type="text"
+            placeholder="Tambah tugas baru..."
+            value={inputTugas}
+            onChange={(e) => setInputTugas(e.target.value)}
+            className="todo-input"
+          />
+          <button type="submit" className="counter-btn">
+            Tambah
+          </button>
+        </form>
 
-      <div className="ticks"></div>
+        <ul className="todo-list">
+          {daftarTodo.map((tugas, index) => (
+            <li key={index} className="todo-item">
+              <span className="todo-text">{tugas}</span>
+              <button onClick={() => hapusTugas(index)} className="delete-btn">
+                Hapus
+              </button>
+            </li>
+          ))}
+        </ul>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+        {daftarTodo.length === 0 && (
+          <p className="empty-msg">Belum ada tugas hari ini. Santai dulu!</p>
+        )}
+        
+        {/* Pembatas dekoratif bawaan tema Vite */}
+        <div className="ticks"></div>
+      </div>
+      <div id="spacer"></div>
+    </div>
+  );
 }
 
-export default App
+export default App;
